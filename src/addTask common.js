@@ -1,16 +1,15 @@
-import { v4 as uuidv4 } from 'uuid';
-import AWS from 'aws-sdk';
-import middy from '@middy/core';
-import httpJSONBodyParser from '@middy/http-json-body-parser';
+const { v4 } = require("uuid");
+const AWS = require("aws-sdk");
+
+const middy = require("@middy/core");
+const httpJSONBodyParser = require("@middy/http-json-body-parser");
 
 const addTask = async (event) => {
   const dynamodb = new AWS.DynamoDB.DocumentClient();
 
-  try {
-
   const { title, description } = event.body;
   const createdAt = new Date();
-  const id = uuidv4();
+  const id = v4();
 
   console.log("created id: ", id);
 
@@ -22,7 +21,6 @@ const addTask = async (event) => {
     done: false,
   };
 
-  console.log("task created: ", newTask);
   await dynamodb
     .put({
       TableName: "TaskTable",
@@ -31,15 +29,11 @@ const addTask = async (event) => {
     .promise();
 
   return {
-    status: 200,
+    statusCode: 200,
     body: JSON.stringify(newTask),
   };
-
-} catch (error) {
-  console.log('error: ', error);
-}
-
 };
 
-export const handlerAddTask = middy(addTask).use(httpJSONBodyParser());
-
+module.exports = {
+  addTask: middy(addTask).use(httpJSONBodyParser()),
+};

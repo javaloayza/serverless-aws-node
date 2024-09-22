@@ -19,19 +19,42 @@ provider:
 
 # configuracion de rutas para funciones
 functions: 
-  hello:
-    handler: src/handler.hello
+  handler:
+    handler: src/handler.handler
     events:
       - httpApi:
           path: /
           method: get
   createTask:
-    handler: src/addTask.addTask
+    handler: src/addTask.handlerAddTask
     events:
       - httpApi:
           path: /tasks
           method: post
-
+  getTasks:
+    handler: src/getTasks.getTasks
+    events:
+      - httpApi:
+          path: /tasks
+          method: get
+  getTask:
+    handler: src/getTask.getTask
+    events:
+      - httpApi:
+          path: /tasks/{id}
+          method: get
+  updateTask:
+    handler: src/updateTask.updateTask
+    events:
+      - httpApi:
+          path: /tasks/{id}
+          method: put
+  deleteTask:
+    handler: src/deleteTask.deleteTask
+    events:
+      - httpApi:
+          path: /tasks/{id}
+          method: delete
 
 resources:
   Resources:
